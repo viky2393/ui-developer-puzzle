@@ -24,4 +24,15 @@ describe('ProductsListComponent', () => {
   it('should create', () => {
     expect(component).toBeDefined();
   });
+
+  it('should have a book list', () => {
+    component.books$.subscribe(list => {
+      expect(list.length).toEqual(0);
+    });
+    component.ngOnInit();
+    component.searchForm.get('term').setValue('Java');
+    component.books$.subscribe(list => {
+      expect(list.length).toBeGreaterThan(0);
+    });
+  });
 });
