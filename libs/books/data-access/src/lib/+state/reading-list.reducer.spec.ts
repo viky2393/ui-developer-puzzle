@@ -51,6 +51,17 @@ describe('Books Reducer', () => {
 
       expect(result.ids).toEqual(['A', 'B', 'C']);
     });
+
+    it('confirmFinishFromReadingList should update the book finished date on the state', () => {
+      const item= createReadingListItem('B');
+      item.finished = true;
+      item.finishedDate = new Date().toISOString();
+      const action = ReadingListActions.confirmedFinishFromReadingList({
+        item: item
+      });
+      const result: State = reducer(state, action);
+      expect(result.entities['B'].finished).toBeTruthy();
+    });
   });
 
   describe('unknown action', () => {
