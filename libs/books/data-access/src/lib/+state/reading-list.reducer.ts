@@ -2,7 +2,7 @@ import { Action, createReducer, on } from '@ngrx/store';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 
 import * as ReadingListActions from './reading-list.actions';
-import {Book, ReadingListItem} from '@tmo/shared/models';
+import { Book, ReadingListItem } from '@tmo/shared/models';
 
 export const READING_LIST_FEATURE_KEY = 'readingList';
 
@@ -61,6 +61,18 @@ const readingListReducer = createReducer(
     delete action.item.bookId;
     const book: Book = {id, ...action.item};
     return readingListAdapter.addOne({bookId: book.id, ...book}, state)
+    }
+  ),
+  on(ReadingListActions.confirmedFinishFromReadingList, (state, action) => {
+      const id: string = action.item.bookId;
+      return readingListAdapter.updateOne({id: id, changes: action.item}, state)
+    }
+  ),
+  on(ReadingListActions.failedFinishFromReadingList, (state, action) => {
+      return {
+        ...state,
+        error: 'Api failed in finishing the book ' + action.item.title
+      }
     }
   ),
 );

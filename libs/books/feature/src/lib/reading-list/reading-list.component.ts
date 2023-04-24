@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { getReadingList, removeFromReadingList } from '@tmo/books/data-access';
-import {Observable} from "rxjs";
-import {ReadingListItem} from "@tmo/shared/models";
+import { finishFromReadingList, getReadingList, removeFromReadingList } from '@tmo/books/data-access';
+import { Observable } from "rxjs";
+import { ReadingListItem } from "@tmo/shared/models";
 
 @Component({
   selector: 'tmo-reading-list',
@@ -16,5 +16,9 @@ export class ReadingListComponent {
 
   removeFromReadingList(item): void {
     this.store.dispatch(removeFromReadingList({ item }));
+  }
+
+  finishFromReadingList(item): void {
+    this.store.dispatch(finishFromReadingList({ item }));
   }
 }
