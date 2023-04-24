@@ -14,7 +14,11 @@ export class BooksEffects {
       switchMap((action) =>
         this.http.get<Book[]>(`/api/books/search?q=${action.term}`).pipe(
           map((data) => BooksActions.searchBooksSuccess({ books: data })),
-          catchError((error) => of(BooksActions.searchBooksFailure({ error })))
+          catchError((error) => {
+              const searchBooksError: string = 'Search books api was failure, ' + error && error.message ? error.message : '';
+              return of(BooksActions.searchBooksFailure({error: searchBooksError}))
+            }
+          )
         )
       )
     )

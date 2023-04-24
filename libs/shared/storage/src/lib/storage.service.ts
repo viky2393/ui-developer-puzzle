@@ -17,12 +17,12 @@ export class StorageService<T extends object = any> {
     return this.state;
   }
 
-  update(mutate: (s: T) => T) {
+  update(mutate: (s: T) => T): void {
     this.state = mutate(this.state);
     this.writeToStorage();
   }
 
-  private readFromStorage() {
+  private readFromStorage(): void {
     const serialized = this.storage.getItem(this.key);
     if (serialized) {
       try {
@@ -34,7 +34,7 @@ export class StorageService<T extends object = any> {
     }
   }
 
-  private writeToStorage() {
+  private writeToStorage(): void {
     this.storage.setItem(this.key, JSON.stringify(this.state));
   }
 }
