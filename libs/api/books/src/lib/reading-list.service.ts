@@ -2,11 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { StorageService } from '@tmo/shared/storage';
 import { Book, ReadingListItem } from '@tmo/shared/models';
 
-const KEY = '[okreads API] Reading List';
+
 
 @Injectable()
 export class ReadingListService {
-  private readonly storage = new StorageService<ReadingListItem[]>(KEY, []);
+  private readonly key = '[okreads API] Reading List';
+  private readonly storage = new StorageService<ReadingListItem[]>(this.key, []);
 
   async getList(): Promise<ReadingListItem[]> {
     return this.storage.read();

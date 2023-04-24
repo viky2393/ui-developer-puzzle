@@ -2,13 +2,13 @@ import { Action, createReducer, on } from '@ngrx/store';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 
 import * as ReadingListActions from './reading-list.actions';
-import { ReadingListItem } from '@tmo/shared/models';
+import {Book, ReadingListItem} from '@tmo/shared/models';
 
 export const READING_LIST_FEATURE_KEY = 'readingList';
 
 export interface State extends EntityState<ReadingListItem> {
   loaded: boolean;
-  error: null | string;
+  error: string;
 }
 
 export interface ReadingListPartialState {
@@ -50,9 +50,19 @@ const readingListReducer = createReducer(
   on(ReadingListActions.addToReadingList, (state, action) =>
     readingListAdapter.addOne({ bookId: action.book.id, ...action.book }, state)
   ),
+  on(ReadingListActions.failedAddToReadingList, (state, action) =>
+    readingListAdapter.removeOne(action.book.id, state)
+  ),
   on(ReadingListActions.removeFromReadingList, (state, action) =>
     readingListAdapter.removeOne(action.item.bookId, state)
-  )
+  ),
+  on(ReadingListActions.failedRemoveFromReadingList, (state, action) => {
+    const id: string = action.item.bookId;
+    delete action.item.bookId;
+    const book: Book = {id, ...action.item};
+    return readingListAdapter.addOne({bookId: book.id, ...book}, state)
+    }
+  ),
 );
 
 export function reducer(state: State | undefined, action: Action) {

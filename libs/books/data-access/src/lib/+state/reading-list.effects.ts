@@ -16,8 +16,10 @@ export class ReadingListEffects implements OnInitEffects {
           map((data) =>
             ReadingListActions.loadReadingListSuccess({ list: data })
           ),
-          catchError((error) =>
-            of(ReadingListActions.loadReadingListError({ error }))
+          catchError((error) => {
+            const loadReadingListError: string = 'Loading reading list api was failure, ' + error && error.message ? error.message : '';
+            return of(ReadingListActions.loadReadingListError({error: loadReadingListError}))
+            }
           )
         )
       )
